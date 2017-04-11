@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">SpaceInvaders</string>
+    <string name="btn_start_string"> START SPACE INVADERS</string>
+</resources>
