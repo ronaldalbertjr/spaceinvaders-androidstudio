@@ -14,7 +14,7 @@ public class SpaceInvaders extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         this.setTitle("Space Invaders");
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(new SpaceInvadersView(this));
     }
 

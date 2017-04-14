@@ -19,7 +19,7 @@ public class Player
     private Player()
     {
         blue = new Paint();
-        blue.setARGB(255, 255, 255, 255);
+        blue.setARGB(200, 0, 0, 255);
 
         width = SpaceInvadersView.screenW * 0.2f;
         height = SpaceInvadersView.screenW * 0.03f;
@@ -63,10 +63,7 @@ public class Player
             isMoving = true;
             isMovingLeft = x > event.getRawX();
         }
-        else if(event.getAction() == MotionEvent.ACTION_UP)
-        {
-            isMoving = false;
-        }
+        else if(event.getAction() == MotionEvent.ACTION_UP) isMoving = false;
     }
     private void CollisionWithScreen()
     {

@@ -26,6 +26,7 @@ public class SpaceInvadersView extends View implements Runnable
     private Score score;
     private Bullet bullet;
     private int HighScore;
+
     public SpaceInvadersView(Context ctx)
     {
         super(ctx);
@@ -69,28 +70,30 @@ public class SpaceInvadersView extends View implements Runnable
 
         if(!isDead && !isPaused)
         {
+            bullet.draw(canvas);
             player.draw(canvas);
+            score.draw(canvas);
+
+            for(Enemy e : em.enemies) e.draw(canvas);
+        }
+        else
+        {
+            canvas.drawText("Clique para reiniciar", screenW * 0.2f, screenH * 0.5f, white);
         }
     }
     private void Update()
     {
         if(!isDead && !isPaused)
         {
+            bullet.update();
             player.update();
         }
-        else if(isDead)
-        {
-            GameOver();
-        }
-    }
-    private void GameOver()
-    {
-
     }
     private void RestartGame()
     {
         bullet = new Bullet();
         score = new Score();
+        em.SetupEnemies();
         isDead = false;
     }
     public void run()

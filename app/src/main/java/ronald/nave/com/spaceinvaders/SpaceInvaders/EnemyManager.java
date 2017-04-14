@@ -37,7 +37,7 @@ public class EnemyManager
         {
             for(int j = 0; j < columns; j++)
             {
-                Enemy enemy = new Enemy();
+                Enemy enemy = new Enemy(i, j, columns);
                 enemies.add(enemy);
             }
         }

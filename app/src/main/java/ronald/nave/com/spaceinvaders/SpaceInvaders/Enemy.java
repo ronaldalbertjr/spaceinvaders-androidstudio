@@ -32,6 +32,6 @@ public class Enemy
 
     public void draw(Canvas canvas)
     {
-        if(!removed) canvas.drawRect(x, y, x+ width, y+width, green);
+        if(!removed) canvas.drawRect(x, y, x + width, y + height, green);
     }
 }
