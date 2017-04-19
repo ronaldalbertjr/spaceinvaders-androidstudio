@@ -13,7 +13,8 @@ public class Player
     private static Player instance;
 
     private Paint blue;
-    private float x, y, width, height, speedX;
+    public float x, y, width, height;
+    private float speedX;
     private boolean isMoving, isMovingLeft;
 
     private Player()

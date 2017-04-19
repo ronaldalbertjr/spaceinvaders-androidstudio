@@ -10,22 +10,23 @@ import android.graphics.Paint;
 public class Bullet
 {
     private Paint red;
-    private float x, y, radius, speedX, speedY;
+    private float x, y, radius, speedY;
     private boolean couldCollide;
     private Player player;
     private EnemyManager em;
+    private boolean destroyed;
 
-    public Bullet()
+    public Bullet(float xPos, float yPos)
     {
         red = new Paint();
         red.setARGB(255, 255, 0, 0);
 
-        x = SpaceInvadersView.screenW / 2;
-        y = SpaceInvadersView.screenH / 2;
+        x = xPos;
+        y = yPos;
         radius = SpaceInvadersView.screenW * 0.04f;
-        speedX = 6f;
         speedY = -6f;
         couldCollide = true;
+        destroyed = false;
 
         player = Player.getInstance();
         em = EnemyManager.getInstance();
@@ -33,35 +34,21 @@ public class Bullet
 
     public void draw(Canvas canvas)
     {
-        canvas.drawCircle(x , y, radius, red);
+
+        if(!destroyed) canvas.drawCircle(x , y, radius, red);
     }
 
     public void update()
     {
-        x += speedX;
         y += speedY;
 
         CollisionWithScreen();
         CollisionWithEnemies();
-        CollisionWithPlayer();
-    }
-
-    private void ChangeBallState(boolean width)
-    {
-        if(couldCollide)
-        {
-            if(width) speedX *= -1;
-            else speedY *= -1;
-
-            couldCollide = false;
-        }
     }
 
     private void CollisionWithScreen()
     {
-        if(x + radius > SpaceInvadersView.screenW || x - radius < 0) ChangeBallState(true);
-        else if(y - radius < 0) ChangeBallState(false);
-        else if(y + radius > SpaceInvadersView.screenH) SpaceInvadersView.isDead = true;
+        if(y + radius > SpaceInvadersView.screenH) destroyed = true;
         else couldCollide = true;
     }
 
@@ -74,17 +61,10 @@ public class Bullet
                 speedY *= -1;
                 e.SetRemoved(true);
                 Score.score += 10;
+                destroyed = true;
                 break;
             }
         }
     }
 
-    private void CollisionWithPlayer()
-    {
-        if(x - radius < player.GetX() + player.GetWidth() && x + radius > player.GetX() && y - radius < player.GetY() + player.GetHeight() && y + radius > player.GetY())
-        {
-            speedY *= -1;
-            couldCollide = false;
-        }
-    }
 }

@@ -5,12 +5,16 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.view.MotionEvent;
 import android.view.View;
 
-/**
- * Created by ronald.junior on 11/04/2017.
- */
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+
 
 public class SpaceInvadersView extends View implements Runnable
 {
@@ -24,7 +28,8 @@ public class SpaceInvadersView extends View implements Runnable
     private Player player;
     private EnemyManager em;
     private Score score;
-    private Bullet bullet;
+    private List<Bullet> bullet;
+    private float timer;
     private int HighScore;
 
     public SpaceInvadersView(Context ctx)
@@ -47,7 +52,7 @@ public class SpaceInvadersView extends View implements Runnable
         white = new Paint();
         white.setARGB(255, 255, 255, 255);
 
-        bullet = new Bullet();
+        bullet = new ArrayList<Bullet>();
         player = Player.getInstance();
         em = EnemyManager.getInstance();
         score = new Score();
@@ -70,11 +75,11 @@ public class SpaceInvadersView extends View implements Runnable
 
         if(!isDead && !isPaused)
         {
-            bullet.draw(canvas);
             player.draw(canvas);
             score.draw(canvas);
 
             for(Enemy e : em.enemies) e.draw(canvas);
+            for(Bullet b : bullet) b.draw(canvas);
         }
         else
         {
@@ -85,13 +90,19 @@ public class SpaceInvadersView extends View implements Runnable
     {
         if(!isDead && !isPaused)
         {
-            bullet.update();
+
+            timer += 0.03;
+            if(timer >= 1)
+            {
+                bullet.add(new Bullet(player.x + (player.width/2), player.y + (player.height/2)));
+                timer = 0;
+            }
+            for(Bullet b : bullet) b.update();
             player.update();
         }
     }
     private void RestartGame()
     {
-        bullet = new Bullet();
         score = new Score();
         em.SetupEnemies();
         isDead = false;
