@@ -80,6 +80,7 @@ public class SpaceInvadersView extends View implements Runnable
 
             for(Enemy e : em.enemies) e.draw(canvas);
             for(Bullet b : bullet) b.draw(canvas);
+            for(Bullet b: em.enemyBullet) b.draw(canvas);
         }
         else
         {
@@ -92,9 +93,9 @@ public class SpaceInvadersView extends View implements Runnable
         {
 
             timer += 0.03;
-            if(timer >= 1)
+            if(timer >= 3)
             {
-                bullet.add(new Bullet(player.x + (player.width/2), player.y + (player.height/2)));
+                bullet.add(new Bullet(player.GetX() + (player.GetWidth()/2), player.GetY()+ (player.GetHeight()/2), true));
                 timer = 0;
             }
             for(int i = 0; i < bullet.size(); i++)
@@ -102,7 +103,7 @@ public class SpaceInvadersView extends View implements Runnable
                 if(!bullet.get(i).destroyed) bullet.get(i).update();
                 else bullet.remove(bullet.get(i));
             }
-            em.update();
+            em.update(player);
             player.update();
         }
     }

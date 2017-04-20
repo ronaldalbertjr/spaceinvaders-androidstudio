@@ -2,6 +2,8 @@ package ronald.nave.com.spaceinvaders.SpaceInvaders;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.provider.Settings;
+import android.util.Log;
 
 /**
  * Created by ronald.junior on 11/04/2017.
@@ -11,21 +13,21 @@ public class Bullet
 {
     private Paint red;
     private float x, y, radius, speedY;
-    private boolean couldCollide;
     private Player player;
     private EnemyManager em;
     public boolean destroyed;
+    public boolean playerBullet;
 
-    public Bullet(float xPos, float yPos)
+    public Bullet(float xPos, float yPos, boolean bulletType)
     {
         red = new Paint();
         red.setARGB(255, 255, 0, 0);
 
+        playerBullet = bulletType;
         x = xPos;
         y = yPos;
         radius = SpaceInvadersView.screenW * 0.01f;
         speedY = -6f;
-        couldCollide = true;
         destroyed = false;
 
         player = Player.getInstance();
@@ -34,37 +36,51 @@ public class Bullet
 
     public void draw(Canvas canvas)
     {
-
         if(!destroyed) canvas.drawCircle(x , y, radius, red);
     }
 
     public void update()
     {
-        y += speedY;
+        if(playerBullet)
+        {
+            y += speedY;
+        }
+        else
+        {
+            Log.d("LOOOOOOOOOOOOOL", "atirou");
+            y -= speedY;
+        }
 
+        Collision();
         CollisionWithScreen();
-        CollisionWithEnemies();
     }
 
     private void CollisionWithScreen()
     {
         if(y + radius > SpaceInvadersView.screenH) destroyed = true;
-        else couldCollide = true;
+        else if(x + radius > SpaceInvadersView.screenW) destroyed = true;
     }
 
-    private void CollisionWithEnemies()
+    private void Collision()
     {
-        for(Enemy e:em.enemies)
+        if(playerBullet)
         {
-            if(!e.GetRemoved() && x - radius < e.GetX() + e.GetWidth() && x + radius > e.GetX() && y - radius < e.GetY() + e.GetHeight() && y + radius > e.GetY())
+            for (Enemy e : em.enemies) {
+                if (!e.GetRemoved() && x - radius < e.GetX() + e.GetWidth() && x + radius > e.GetX() && y - radius < e.GetY() + e.GetHeight() && y + radius > e.GetY()) {
+                    speedY *= -1;
+                    e.SetRemoved(true);
+                    Score.score += 10;
+                    destroyed = true;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            if (x - radius < player.GetX() + player.GetWidth() && x + radius > player.GetX() && y - radius < player.GetY() + player.GetHeight() && y + radius > player.GetY())
             {
-                speedY *= -1;
-                e.SetRemoved(true);
-                Score.score += 10;
-                destroyed = true;
-                break;
+                System.out.print("player damaged");
             }
         }
     }
-
 }

@@ -38,6 +38,5 @@ public class Enemy
     public void update(float speedX)
     {
         this.x += speedX;
-
     }
 }
