@@ -14,7 +14,7 @@ public class Bullet
     private boolean couldCollide;
     private Player player;
     private EnemyManager em;
-    private boolean destroyed;
+    public boolean destroyed;
 
     public Bullet(float xPos, float yPos)
     {
@@ -23,7 +23,7 @@ public class Bullet
 
         x = xPos;
         y = yPos;
-        radius = SpaceInvadersView.screenW * 0.04f;
+        radius = SpaceInvadersView.screenW * 0.01f;
         speedY = -6f;
         couldCollide = true;
         destroyed = false;

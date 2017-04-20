@@ -14,10 +14,10 @@ public class Enemy
         green = new Paint();
         green.setARGB(255, 0, 255, 0);
 
-        width = (SpaceInvadersView.screenW / columns) - ((SpaceInvadersView.screenW * 0.02f) + 2 * columns) / columns;
+        width = (SpaceInvadersView.screenW / columns) - ((SpaceInvadersView.screenW * 0.05f) + 2 * columns) / columns;
         height = SpaceInvadersView.screenH * 0.05f;
 
-        this.x = (SpaceInvadersView.screenW * 0.02f) + j * width + (j*2);
+        this.x = ((SpaceInvadersView.screenW * 0.05f) + j * width + (j*2)) + 20;
         this.y = (SpaceInvadersView.screenH * 0.05f) + i * height + (i*2);
 
         removed = false;
@@ -33,5 +33,11 @@ public class Enemy
     public void draw(Canvas canvas)
     {
         if(!removed) canvas.drawRect(x, y, x + width, y + height, green);
+    }
+
+    public void update(float speedX)
+    {
+        this.x += speedX;
+
     }
 }

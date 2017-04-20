@@ -13,12 +13,15 @@ public class EnemyManager
 
     private int lines, columns;
     public List<Enemy> enemies;
+    Enemy leftEnemy,rightEnemy;
+    float speedX;
 
     private EnemyManager()
     {
-        lines = 4;
-        columns = 6;
+        lines = 5;
+        columns = 7;
 
+        speedX = 2;
         enemies = new ArrayList<>();
         SetupEnemies();
     }
@@ -29,6 +32,25 @@ public class EnemyManager
 
         return instance;
     }
+    public void update()
+    {
+        for(Enemy e: enemies)
+        {
+            e.update(speedX);
+        }
+        CheckCollisionWithScreen();
+    }
+    private void CheckCollisionWithScreen()
+    {
+        if(leftEnemy.GetX() < 0)
+        {
+            speedX = 2;
+        }
+        else if(rightEnemy.GetX() + rightEnemy.GetWidth() > SpaceInvadersView.screenW)
+        {
+            speedX = -2;
+        }
+    }
     public void SetupEnemies()
     {
         enemies.clear();
@@ -38,6 +60,14 @@ public class EnemyManager
             for(int j = 0; j < columns; j++)
             {
                 Enemy enemy = new Enemy(i, j, columns);
+                if(i == lines - 1 && j == 0)
+                {
+                    leftEnemy = enemy;
+                }
+                else if(i == lines - 1 && j == columns - 1)
+                {
+                    rightEnemy = enemy;
+                }
                 enemies.add(enemy);
             }
         }

@@ -97,7 +97,12 @@ public class SpaceInvadersView extends View implements Runnable
                 bullet.add(new Bullet(player.x + (player.width/2), player.y + (player.height/2)));
                 timer = 0;
             }
-            for(Bullet b : bullet) b.update();
+            for(int i = 0; i < bullet.size(); i++)
+            {
+                if(!bullet.get(i).destroyed) bullet.get(i).update();
+                else bullet.remove(bullet.get(i));
+            }
+            em.update();
             player.update();
         }
     }
