@@ -91,6 +91,8 @@ public class EnemyManager
     private void GetClosestEnemyToPlayer(Player player)
     {
         float[] closestDistance = new float[2];
+        closestDistance[0] = 9999999999;
+        closestDistance[1] = 9999999999;
         for(Enemy e: enemies)
         {
             if(Math.abs(e.GetX() - player.GetX()) < closestDistance[0] && Math.abs(e.GetY() - player.GetY()) < closestDistance[1])
