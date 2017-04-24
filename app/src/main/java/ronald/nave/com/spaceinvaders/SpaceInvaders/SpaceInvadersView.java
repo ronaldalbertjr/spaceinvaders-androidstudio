@@ -41,7 +41,7 @@ public class SpaceInvadersView extends View implements Runnable
     protected void Start(Context ctx)
     {
         c = ctx;
-        setBackgroundColor(Color.BLACK);
+        setBackgroundColor(Color.GRAY);
 
         screenW = c.getResources().getDisplayMetrics().widthPixels;
         screenH = c.getResources().getDisplayMetrics().heightPixels;
@@ -53,8 +53,8 @@ public class SpaceInvadersView extends View implements Runnable
         white.setARGB(255, 255, 255, 255);
 
         bullet = new ArrayList<Bullet>();
-        player = Player.getInstance();
-        em = EnemyManager.getInstance();
+        player = Player.getInstance(c);
+        em = EnemyManager.getInstance(c);
         score = new Score();
 
         handler = new Handler();
@@ -78,7 +78,7 @@ public class SpaceInvadersView extends View implements Runnable
             player.draw(canvas);
             score.draw(canvas);
 
-            for(Enemy e : em.enemies) e.draw(canvas);
+            for(Enemy e : em.enemies) e.draw(canvas, em.bm);
             for(Bullet b : bullet) b.draw(canvas);
             for(Bullet b: em.enemyBullet) b.draw(canvas);
         }
@@ -95,7 +95,7 @@ public class SpaceInvadersView extends View implements Runnable
             timer += 0.03;
             if(timer >= 3)
             {
-                bullet.add(new Bullet(player.GetX() + (player.GetWidth()/2), player.GetY()+ (player.GetHeight()/2), true));
+                bullet.add(new Bullet(player.GetX() + (player.GetWidth()/2), player.GetY()+ (player.GetHeight()/2), true, c));
                 timer = 0;
             }
             for(int i = 0; i < bullet.size(); i++)
@@ -111,6 +111,8 @@ public class SpaceInvadersView extends View implements Runnable
     {
         score = new Score();
         em.SetupEnemies();
+        em.enemyBullet.clear();
+        bullet.clear();
         isDead = false;
     }
     public void run()

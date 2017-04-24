@@ -1,8 +1,13 @@
 package ronald.nave.com.spaceinvaders.SpaceInvaders;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.view.MotionEvent;
+
+import ronald.nave.com.spaceinvaders.R;
 
 /**
  * Created by ronald.junior on 11/04/2017.
@@ -16,14 +21,19 @@ public class Player
     private float x, y, width, height;
     private float speedX;
     private boolean isMoving, isMovingLeft;
-
-    private Player()
+    static Context c;
+    Bitmap bm;
+    private Player(Context ctx)
     {
-        blue = new Paint();
-        blue.setARGB(200, 0, 0, 255);
+        c = ctx;
 
+        blue = new Paint();
         width = SpaceInvadersView.screenW * 0.2f;
-        height = SpaceInvadersView.screenW * 0.03f;
+        height = SpaceInvadersView.screenW * 0.1f;
+
+
+        bm = BitmapFactory.decodeResource(c.getResources(), R.drawable.ship);
+        bm = Bitmap.createScaledBitmap(bm, (int) width, (int) height, false);
         x = (SpaceInvadersView.screenW/ 2) - (width/ 2);
         y = SpaceInvadersView.screenH * 0.8f;
 
@@ -31,9 +41,9 @@ public class Player
         isMoving = isMovingLeft = false;
     }
 
-    public static Player getInstance()
+    public static Player getInstance(Context ctx)
     {
-        if(instance == null) instance = new Player();
+        if(instance == null) instance = new Player(ctx);
 
         return instance;
     }
@@ -45,7 +55,7 @@ public class Player
 
     public void draw(Canvas canvas)
     {
-        canvas.drawRect(x, y, x + width, y + height, blue);
+        canvas.drawBitmap(bm, x, y, blue);
     }
 
     public void update()

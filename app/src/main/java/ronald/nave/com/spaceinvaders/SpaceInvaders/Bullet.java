@@ -1,5 +1,6 @@
 package ronald.nave.com.spaceinvaders.SpaceInvaders;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.provider.Settings;
@@ -18,7 +19,7 @@ public class Bullet
     public boolean destroyed;
     public boolean playerBullet;
 
-    public Bullet(float xPos, float yPos, boolean bulletType)
+    public Bullet(float xPos, float yPos, boolean bulletType, Context ctx)
     {
         red = new Paint();
         red.setARGB(255, 255, 0, 0);
@@ -27,11 +28,11 @@ public class Bullet
         x = xPos;
         y = yPos;
         radius = SpaceInvadersView.screenW * 0.01f;
-        speedY = -6f;
+        speedY = -12f;
         destroyed = false;
 
-        player = Player.getInstance();
-        em = EnemyManager.getInstance();
+        player = Player.getInstance(ctx);
+        em = EnemyManager.getInstance(ctx);
     }
 
     public void draw(Canvas canvas)
@@ -47,7 +48,6 @@ public class Bullet
         }
         else
         {
-            Log.d("LOOOOOOOOOOOOOL", "atirou");
             y -= speedY;
         }
 
@@ -79,7 +79,7 @@ public class Bullet
         {
             if (x - radius < player.GetX() + player.GetWidth() && x + radius > player.GetX() && y - radius < player.GetY() + player.GetHeight() && y + radius > player.GetY())
             {
-                System.out.print("player damaged");
+                SpaceInvadersView.isDead = true;
             }
         }
     }

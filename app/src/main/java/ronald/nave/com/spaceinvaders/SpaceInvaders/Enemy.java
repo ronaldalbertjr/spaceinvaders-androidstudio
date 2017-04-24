@@ -1,7 +1,13 @@
 package ronald.nave.com.spaceinvaders.SpaceInvaders;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+
+import ronald.nave.com.spaceinvaders.MainActivity;
+import ronald.nave.com.spaceinvaders.R;
 
 public class Enemy
 {
@@ -9,10 +15,11 @@ public class Enemy
     private float x,y,width, height;
     private boolean removed;
 
-    public Enemy(int i, int j, int columns)
+    public Enemy(int i, int j, int columns, Context ctx)
     {
         green = new Paint();
-        green.setARGB(255, 0, 255, 0);
+        green.setARGB(255, 255, 255, 0);
+
 
         width = (SpaceInvadersView.screenW / columns) - ((SpaceInvadersView.screenW * 0.05f) + 2 * columns) / columns;
         height = SpaceInvadersView.screenH * 0.05f;
@@ -30,9 +37,9 @@ public class Enemy
     public boolean GetRemoved(){return removed;}
     public void SetRemoved(boolean value) {removed = value;}
 
-    public void draw(Canvas canvas)
+    public void draw(Canvas canvas, Bitmap bm)
     {
-        if(!removed) canvas.drawRect(x, y, x + width, y + height, green);
+        if(!removed) canvas.drawBitmap(bm, x, y, green);
     }
 
     public void update(float speedX)

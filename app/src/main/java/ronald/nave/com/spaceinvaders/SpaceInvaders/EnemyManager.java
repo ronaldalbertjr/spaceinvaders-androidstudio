@@ -1,10 +1,15 @@
 package ronald.nave.com.spaceinvaders.SpaceInvaders;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.widget.Toast;
+import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import ronald.nave.com.spaceinvaders.R;
 
 
 public class EnemyManager
@@ -14,23 +19,32 @@ public class EnemyManager
     private int lines, columns;
     public List<Enemy> enemies;
     Enemy leftEnemy,rightEnemy, closestEnemy;
+    float imgWidth, imgHeight;
     List<Bullet> enemyBullet;
     float speedX, timer;
+    public Bitmap bm;
+    Context c;
 
-    private EnemyManager()
+    private EnemyManager(Context ctx)
     {
+        c = ctx;
+
         lines = 5;
         columns = 7;
 
         speedX = 2;
+        imgWidth = (SpaceInvadersView.screenW / columns) - ((SpaceInvadersView.screenW * 0.05f) + 2 * columns) / columns;
+        imgHeight = SpaceInvadersView.screenH * 0.05f;
+        bm = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.space_invader);
+        bm = Bitmap.createScaledBitmap(bm, (int) imgWidth, (int) imgHeight, false);
         enemies = new ArrayList<>();
         enemyBullet = new ArrayList<>();
         SetupEnemies();
     }
 
-    public static EnemyManager getInstance()
+    public static EnemyManager getInstance(Context ctx)
     {
-        if(instance == null) instance = new EnemyManager();
+        if(instance == null) instance = new EnemyManager(ctx);
 
         return instance;
     }
@@ -43,10 +57,10 @@ public class EnemyManager
         }
 
         timer += 0.03;
-        if(timer >= 1)
+        if(timer >= 5)
         {
             timer = 0;
-            enemyBullet.add(new Bullet(closestEnemy.GetX() + (closestEnemy.GetWidth()/2), closestEnemy.GetY() + (closestEnemy.GetHeight()/2), false));
+            enemyBullet.add(new Bullet(closestEnemy.GetX() + (closestEnemy.GetWidth()/2), closestEnemy.GetY() + (closestEnemy.GetHeight()/2), false, c));
         }
         for(int i = 0; i < enemyBullet.size(); i++)
         {
@@ -74,7 +88,7 @@ public class EnemyManager
         {
             for(int j = 0; j < columns; j++)
             {
-                Enemy enemy = new Enemy(i, j, columns);
+                Enemy enemy = new Enemy(i, j, columns, c);
                 if(i == lines - 1 && j == 0)
                 {
                     leftEnemy = enemy;
@@ -91,8 +105,8 @@ public class EnemyManager
     private void GetClosestEnemyToPlayer(Player player)
     {
         float[] closestDistance = new float[2];
-        closestDistance[0] = 9999999999;
-        closestDistance[1] = 9999999999;
+        closestDistance[0] = 9999999;
+        closestDistance[1] = 9999999;
         for(Enemy e: enemies)
         {
             if(Math.abs(e.GetX() - player.GetX()) < closestDistance[0] && Math.abs(e.GetY() - player.GetY()) < closestDistance[1])
